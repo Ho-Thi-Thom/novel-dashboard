@@ -81,7 +81,7 @@ const Step1 = ({ data, nextStep }) => {
         }}
       />
 
-      <Button color="primary" variant="contained" fullWidth type="submit">
+      <Button color="success" variant="contained" fullWidth type="submit" style={{ marginTop: "7px" }}>
         Next step
       </Button>
     </form>

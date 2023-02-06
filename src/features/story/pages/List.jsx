@@ -25,6 +25,8 @@ const List = () => {
     });
   }, []);
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <Box m="20px 5px 20px 20px">
       <Header title="Novels" subtitle="List of Novel" />

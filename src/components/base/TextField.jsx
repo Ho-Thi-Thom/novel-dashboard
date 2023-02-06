@@ -2,7 +2,7 @@ import React from "react";
 import { TextField as MTextField } from "@mui/material";
 import { Controller } from "react-hook-form";
 
-const TextField = ({ control, name, label, ...props }) => {
+const TextField = ({ control, name, label, onChange, ...props }) => {
   return (
     <Controller
       control={control}

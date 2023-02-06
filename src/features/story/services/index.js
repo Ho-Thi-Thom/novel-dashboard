@@ -47,7 +47,7 @@ export const dataGridServices = {
               onClick={() =>
                 navigate(params.id, {
                   state: {
-                    data: "thuan",
+                    data: "data",
                   },
                 })
               }
