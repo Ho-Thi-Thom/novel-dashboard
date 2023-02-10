@@ -14,6 +14,7 @@ const TextField = ({ control, name, label, onChange, ...props }) => {
           label={label}
           error={error}
           helperText={error?.message}
+          color="secondary"
           {...field}
           {...props}
         />

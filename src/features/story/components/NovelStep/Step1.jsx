@@ -1,11 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Image from "../../../../components/base/Image";
 import TextField from "../../../../components/base/TextField";
 import Upload from "../../../../components/base/Upload";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import { useStepContext } from "./StepContext";
 
 const validationSchema = yup.object().shape({
   title: yup.string().required("required"),
@@ -21,7 +23,8 @@ const initialValues = {
   image: null,
 };
 
-const Step1 = ({ data, nextStep }) => {
+const Step1 = () => {
+  const { data, nextStep } = useStepContext();
   const form = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
@@ -39,7 +42,7 @@ const Step1 = ({ data, nextStep }) => {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <TextField control={form.control} name="title" label="Title" />
+      <TextField control={form.control} name="title" label="Title" size="medium" />
       <TextField
         control={form.control}
         size="medium"
@@ -81,9 +84,17 @@ const Step1 = ({ data, nextStep }) => {
         }}
       />
 
-      <Button color="success" variant="contained" fullWidth type="submit" style={{ marginTop: "7px" }}>
-        Next step
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          color="success"
+          variant="contained"
+          type="submit"
+          style={{ marginTop: "7px" }}
+          endIcon={<ArrowForwardIosOutlinedIcon />}
+        >
+          Next step
+        </Button>
+      </Box>
     </form>
   );
 };

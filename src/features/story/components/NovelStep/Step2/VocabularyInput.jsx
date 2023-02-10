@@ -26,16 +26,18 @@ const VocabularyInput = ({ onCancel, onSubmit, defaultValues }) => {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, border: 1, p: 2, borderRadius: "7px" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, border: 1, p: 2, borderRadius: "4px" }}>
         <TextField variant="standard" control={form.control} name="en" label="English" />
         <TextField variant="standard" control={form.control} name="vi" label="Vietnamese" />
         <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
           <Button variant="contained" color="info" type="submit">
             Save
           </Button>
-          <Button variant="outlined" color="error" type="button" onClick={onCancel}>
-            Cancel
-          </Button>
+          {onCancel && (
+            <Button variant="outlined" color="error" type="button" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
         </Box>
       </Box>
     </form>

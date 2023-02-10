@@ -58,7 +58,8 @@ const Item = forwardRef(({ data, sx = {}, onCreate, onEdit, onDelete, ...props }
     show: false,
     isEdit: false,
   });
-
+  const theme = useTheme();
+  const color = tokens(theme);
   const handleOpenInput = (isEdit) => {
     setShowInput({
       show: true,
@@ -104,7 +105,7 @@ const Item = forwardRef(({ data, sx = {}, onCreate, onEdit, onDelete, ...props }
             <CreateOutlinedIcon />
           </IconButton>
           <IconButton onClick={() => handleOpenInput(false)}>
-            <AddCircleOutlineIcon />
+            <AddCircleOutlineIcon sx={{ color: color.blueAccent[500] }} />
           </IconButton>
           <IconButton onClick={onDelete}>
             <DeleteOutlinedIcon color="error" />
