@@ -2,19 +2,23 @@ import { useTheme } from "@emotion/react";
 import { Box } from "@mui/material";
 import React, { lazy, Suspense, useMemo, useRef, useState } from "react";
 import Header from "../../../../components/Header";
+
 import { tokens } from "../../../../theme";
+
 import StepProvider from "./StepContext";
 import ProgressStepper from "../ProgressStepper";
+import client from "../../../../sanity/config";
+
 const Step1 = lazy(() => import("./Step1"));
 const Step2 = lazy(() => import("./Step2"));
 const Step3 = lazy(() => import("./Step3"));
 
-const NovelStep = ({ data }) => {
+const NovelStep = ({ data, onSubmit }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const isEdit = Boolean(data);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const dataRef = useRef(data);
   const save = (data) => {
     dataRef.current = {
@@ -24,29 +28,32 @@ const NovelStep = ({ data }) => {
   };
 
   const handleNextStep = () => {
-    if (step < 2) {
+    if (step < 4) {
       setStep(step + 1);
     }
   };
 
   const handleBack = () => {
-    if (step > 0) {
+    if (step > 1) {
       setStep(step - 1);
     }
   };
 
-  const handleSubmit = () => {
-    console.log("submit");
+  const handleSubmit = async () => {
+    try {
+      await onSubmit(dataRef.current);
+      handleNextStep();
+    } catch (error) {}
   };
 
   const renderStep = useMemo(() => {
     switch (step) {
-      case 0:
-        return <Step1 />;
       case 1:
-        return <Step2 />;
+        return <Step1 />;
       case 2:
-        return <Step3 onUpdate={handleSubmit} />;
+        return <Step2 />;
+      case 3:
+        return <Step3 onSubmit={handleSubmit} isEdit={isEdit} />;
       default:
         return null;
     }
@@ -65,7 +72,7 @@ const NovelStep = ({ data }) => {
         title={isEdit ? "Edit Novel" : "Create Novel"}
         subtitle={isEdit ? "Update the content for the story template" : "Create the content"}
       />
-      <Box sx={{ pt: 2, my: 2, mx: "auto", backgroundColor: colors.primary[400], borderRadius: 2, width: "70%" }}>
+      <Box sx={{ py: 2, my: 2, mx: "auto", backgroundColor: colors.primary[400], borderRadius: 2, width: "70%" }}>
         <ProgressStepper activeStep={step} setActiveStep={setStep} />
       </Box>
       <StepProvider value={value}>

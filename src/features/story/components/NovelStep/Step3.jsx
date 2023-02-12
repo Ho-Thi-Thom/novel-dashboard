@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
-const Step3 = ({ onUpdate }) => {
+const Step3 = ({ onSubmit, isEdit }) => {
   const { backStep, data } = useStepContext();
 
   const theme = useTheme();
@@ -17,7 +17,7 @@ const Step3 = ({ onUpdate }) => {
   const BlueOnGreenTooltip = withStyles({
     tooltip: {
       fontSize: "14px",
-      color: colors.grey[100],
+      color: "white",
       backgroundColor: colors.greenAccent[900],
       padding: "5px",
     },
@@ -78,10 +78,10 @@ const Step3 = ({ onUpdate }) => {
             color="secondary"
             variant="contained"
             style={{ marginTop: "7px" }}
-            onClick={onUpdate}
+            onClick={onSubmit}
             endIcon={<SaveAltIcon />}
           >
-            Update
+            {isEdit ? "Update" : "Create"}
           </Button>
         </Box>
       </Box>

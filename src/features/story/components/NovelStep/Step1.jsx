@@ -13,7 +13,7 @@ const validationSchema = yup.object().shape({
   title: yup.string().required("required"),
   content: yup.string().required("required"),
   imageUrl: yup.string().nullable(),
-  image: yup.string().nullable(),
+  image: yup.mixed().nullable(),
 });
 
 const initialValues = {

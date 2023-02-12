@@ -11,8 +11,6 @@ const Upload = ({ control, name, onChange, accept, size = 2, ...props }) => {
     const file = e.target.files[0];
 
     if (file) {
-      console.log(file);
-
       // Validate
       if (!validate.type(accept, file.type)) {
         setError("Invalid format, accept: " + accept);

@@ -97,8 +97,9 @@ const Item = forwardRef(({ data, sx = {}, onCreate, onEdit, onDelete, ...props }
         alignItems="center"
       >
         <MoreVertOutlinedIcon />
-        <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
-          <Typography>{data.en}</Typography>/<Typography>{data.vi}</Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          <Typography whiteSpace="nowrap">{data.en}</Typography>
+          <Typography whiteSpace="nowrap">{data.vi}</Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 0.3 }}>
           <IconButton onClick={() => handleOpenInput(true)}>
