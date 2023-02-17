@@ -1,5 +1,5 @@
 export const GET_ALL_NOVEL = `
-    *[_type == 'story'] | order(dateTime(_createdAt) asc) {
+    *[_type == 'story'] | order(dateTime(_createdAt) desc) {
         "id":_id ,
         title,
         "imageUrl" :image.asset ->url,

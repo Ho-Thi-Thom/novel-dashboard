@@ -1,8 +1,20 @@
+import { Box, Button } from "@mui/material";
 import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { queryClient } from "../../../App";
+import Notification from "../../../components/Notification";
 import client from "../../../sanity/config";
 import NovelStep from "../components/NovelStep";
 
 const Create = () => {
+  const [notification, setNotification] = useState({
+    state: false,
+    infor: {
+      type: "",
+      message: "",
+    },
+  });
   const handleSubmit = async (data) => {
     try {
       const temp = [];
@@ -53,13 +65,49 @@ const Create = () => {
       await transaction.commit({
         autoGenerateArrayKeys: true,
       });
-
-      alert("success");
+      setNotification({
+        state: "true",
+        infor: {
+          type: "success",
+          message: "Create Novel Success",
+        },
+      });
     } catch (error) {
-      alert("error");
+      setNotification({
+        state: "true",
+        infor: {
+          type: "error",
+          message: `Create Novel Error: ${error}`,
+        },
+      });
     }
   };
-  return <NovelStep onSubmit={handleSubmit} />;
+
+  return (
+    <>
+      <NovelStep onSubmit={handleSubmit} />
+
+      {notification.state ? (
+        <>
+          <Notification notify={{ isOpen: true, message: notification.infor.message, type: notification.infor.type }} />
+          <Box sx={{ width: "75%", mx: "auto", display: "flex", justifyContent: "center", gap: 2 }}>
+            <Link style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="secondary" onClick={() => window.location.reload(true)}>
+                Create
+              </Button>
+            </Link>
+            <Link to={"/story"} style={{ textDecoration: "none" }}>
+              <Button color="info" variant="contained">
+                List Novel
+              </Button>
+            </Link>
+          </Box>
+        </>
+      ) : (
+        ""
+      )}
+    </>
+  );
 };
 
 export default Create;

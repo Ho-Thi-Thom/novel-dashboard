@@ -7,7 +7,7 @@ import { tokens } from "../../../../theme";
 
 import StepProvider from "./StepContext";
 import ProgressStepper from "../ProgressStepper";
-import client from "../../../../sanity/config";
+import Notification from "../../../../components/Notification";
 
 const Step1 = lazy(() => import("./Step1"));
 const Step2 = lazy(() => import("./Step2"));

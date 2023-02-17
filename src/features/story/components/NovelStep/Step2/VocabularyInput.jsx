@@ -14,7 +14,6 @@ const initialValue = {
   vi: "",
 };
 const VocabularyInput = ({ onCancel, onSubmit, defaultValues }) => {
-  console.log(defaultValues);
   const form = useForm({
     defaultValues: defaultValues ?? initialValue,
     resolver: yupResolver(shema),

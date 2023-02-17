@@ -11,7 +11,7 @@ const Auth = lazy(() => import("./features/auth"));
 const Story = lazy(() => import("./features/story"));
 const User = lazy(() => import("./features/user"));
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
   // useEffect(() => {

@@ -11,7 +11,6 @@ const steps = [
 const ProgressStepper = ({ activeStep, setActiveStep }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  console.log(activeStep);
   return (
     <div>
       <Stepper
@@ -21,7 +20,7 @@ const ProgressStepper = ({ activeStep, setActiveStep }) => {
             color: colors.greenAccent[500],
           },
           "& .MuiStepIcon-root.Mui-active": {
-            color: colors.redAccent[500],
+            color: colors.redAccent[400],
           },
           "& .MuiStepIcon-root": {
             color: colors.blueAccent[500],

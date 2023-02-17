@@ -1,5 +1,5 @@
-import { Box, Button } from "@mui/material";
-import { useMemo, useState } from "react";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import DataGrid from "../../../components/DataGrid";
@@ -10,12 +10,52 @@ import { dataGridServices } from "../services";
 
 const List = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
+  const { data, isLoading, refetch } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
     initialData: [],
   });
 
+  const [open, setOpen] = useState({
+    state: false,
+    infor: "",
+  });
+  // const [data, setData] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // useEffect(() => {
+  //   client
+  //     .fetch(GET_ALL_NOVEL)
+  //     .then((result) => {
+  //       setData(result);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [isLoading]);
+
+  const openConfirm = (params) => {
+    setOpen({ state: true, infor: params.row });
+  };
+
+  const handleClose = () => {
+    setOpen({ state: false, infor: "" });
+  };
   const handleDeleteItem = (params) => {
-    console.log(params.row.title);
+    openConfirm(params);
+    // client
+    //   .delete(params.row.id)
+    //   .then(() => {
+    //     console.log(" deleted", params.row);
+    //     // setIsLoading(true);
+    //     refetch();
+    //   })
+    //   .catch((err) => {
+    //     console.error("Delete failed: ", err.message);
+    //   });
+  };
+  const handleConfirm = () => {
+    // console.log(open.infor);
+    // delete
+    handleClose();
   };
   const [pageSize, setPageSize] = useState(7);
 
@@ -33,7 +73,7 @@ const List = () => {
       <Header title="Novels" subtitle="List of Novel" />
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Link style={{ textDecoration: "none" }} to="create">
-          <Button variant="contained" color="secondary" onClick={() => {}}>
+          <Button variant="contained" color="secondary">
             Create
           </Button>
         </Link>
@@ -45,9 +85,24 @@ const List = () => {
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[7, 10, 20]}
         pagination
-        // checkboxSelection
-        // onSelectionModelChange={(item) => console.log(item)}
       />
+      <Dialog
+        open={open.state}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Are you sure you want to delete this story ?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">{open.infor.title}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
