@@ -7,7 +7,7 @@ import Image from "../../../../components/base/Image";
 import TextField from "../../../../components/base/TextField";
 import Upload from "../../../../components/base/Upload";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import { useStepContext } from "./StepContext";
+import { useStepContext } from "../../../../context/StepContext";
 
 const validationSchema = yup.object().shape({
   title: yup.string().required("required"),
@@ -64,7 +64,7 @@ const Step1 = () => {
           placeholder={
             <img
               alt="placeholder"
-              src={require("../../../../untils/img/novel.png")}
+              src={require("../../../../utils/img/novel.png")}
               width={60}
               height={40}
               style={{ borderRadius: "6px", cursor: "pointer" }}

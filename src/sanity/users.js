@@ -15,7 +15,8 @@ export const GET_USER_LOGIN = `
         _id,
         username,
         role ->{
-            key
+            key,
+            name
         }
     }
 `;

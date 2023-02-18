@@ -10,9 +10,9 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import useVocabularyContent from "../../../../../hook/useVocabularyContent";
 import { tokens } from "../../../../../theme";
-import { useStepContext } from "../StepContext";
 import VocabularyInput from "./VocabularyInput";
 import VocabularyItem from "./VocabularyItem";
+import { useStepContext } from "../../../../../context/StepContext";
 
 const Step2 = () => {
   const { nextStep, backStep, data } = useStepContext();

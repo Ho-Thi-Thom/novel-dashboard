@@ -13,7 +13,7 @@ export const dataGridServices = {
         return params.value ? (
           <img src={params.value} width={60} height={40} alt="img-novel" />
         ) : (
-          <img alt="img-novel" src={require("../../../untils/img/novel.png")} width={60} height={40} />
+          <img alt="img-novel" src={require("../../../utils/img/novel.png")} width={60} height={40} />
         );
       },
     },

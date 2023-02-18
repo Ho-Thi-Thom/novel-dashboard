@@ -5,21 +5,33 @@ import Header from "../../../../components/Header";
 
 import { tokens } from "../../../../theme";
 
-import StepProvider from "./StepContext";
+import { forwardRef, useImperativeHandle } from "react";
+import StepProvider from "../../../../context/StepContext";
 import ProgressStepper from "../ProgressStepper";
-import Notification from "../../../../components/Notification";
 
 const Step1 = lazy(() => import("./Step1"));
 const Step2 = lazy(() => import("./Step2"));
 const Step3 = lazy(() => import("./Step3"));
 
-const NovelStep = ({ data, onSubmit }) => {
+const NovelStep = forwardRef(({ data, onSubmit }, ref) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const isEdit = Boolean(data);
   const [step, setStep] = useState(1);
   const dataRef = useRef(data);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      refresh() {
+        setStep(1);
+        dataRef.current = null;
+      },
+    }),
+    []
+  );
+
   const save = (data) => {
     dataRef.current = {
       ...dataRef.current,
@@ -80,6 +92,6 @@ const NovelStep = ({ data, onSubmit }) => {
       </StepProvider>
     </Box>
   );
-};
+});
 
 export default NovelStep;

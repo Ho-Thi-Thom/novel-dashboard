@@ -2,11 +2,11 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import React from "react";
 import useVocabularyContent from "../../../../hook/useVocabularyContent";
 import { tokens } from "../../../../theme";
-import { useStepContext } from "./StepContext";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { useStepContext } from "../../../../context/StepContext";
 
 const Step3 = ({ onSubmit, isEdit }) => {
   const { backStep, data } = useStepContext();

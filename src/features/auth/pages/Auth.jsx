@@ -1,67 +1,39 @@
-import React, { useEffect } from "react";
-import GoogleLogin from "react-google-login";
+import { Box, Button } from "@mui/material";
 import { gapi } from "gapi-script";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import GoogleLogin from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
-import perfect_two from "../../../untils/img/mp4/perfect_two.mp4";
-import { Box, Button, Typography } from "@mui/material";
+import { Navigate } from "react-router-dom";
 import client from "../../../sanity/config";
-import md5 from "md5";
-import { useQuery } from "react-query";
-import { GET_USER_LOGIN } from "../../../sanity/users";
-import { useState } from "react";
-import Notification from "../../../components/Notification";
+import perfect_two from "../../../utils/img/mp4/perfect_two.mp4";
+
 const Auth = () => {
-  const navigate = useNavigate();
-  const [data, setData] = useState({});
+  const [, setLogin] = useState(false);
+
   useEffect(() => {
     gapi.load("client:auth2", () => {
-      gapi.auth2.init({ clientId: "860741111025-eigskqdrv1vnms8vfnb6pneol98720es.apps.googleusercontent.com" });
+      gapi.auth2.init({ clientId: process.env.REACT_APP_GOOGLE_API_TOKEN });
     });
   }, []);
 
-  const checkUserLogin = (googleId) => {
-    try {
-      client.fetch(GET_USER_LOGIN, { googleId: md5(googleId) }).then((resutl) => {
-        setData(resutl);
-      });
-    } catch (error) {
-      return false;
-    }
-    return true;
-  };
-  const responseGoogle = (response) => {
+  const responseGoogle = async (response) => {
     const { googleId, name } = response.profileObj;
-    if (checkUserLogin(googleId)) {
-      localStorage.setItem("user", JSON.stringify(data));
-      navigate("/", { replace: true });
-    } else {
-      client
-        .createIfNotExists({
-          _id: md5(googleId),
-          _type: "user",
-          username: name,
-        })
-        .then(() => {
-          <Notification
-            notify={{
-              isOpen: "true",
-              message: "Your account has been registered, please wait for the administrator to confirm!",
-              type: "infor",
-            }}
-          />;
-        })
-        .catch((error) => {
-          <Notification
-            notify={{
-              isOpen: "true",
-              message: error,
-              type: "infor",
-            }}
-          />;
-        });
-    }
+
+    localStorage.setItem("user", googleId);
+
+    await client.createIfNotExists({
+      _id: googleId,
+      _type: "user",
+      username: name,
+    });
+
+    // FAKE re-render
+    setLogin(true);
   };
+
+  if (localStorage.getItem("user")) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>

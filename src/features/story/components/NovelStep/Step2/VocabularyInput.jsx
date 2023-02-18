@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import TextField from "../../../../../components/base/TextField";
 
-const shema = yup.object().shape({
+const schema = yup.object().shape({
   en: yup.string().required("required"),
   vi: yup.string().required("required"),
 });
@@ -16,7 +16,7 @@ const initialValue = {
 const VocabularyInput = ({ onCancel, onSubmit, defaultValues }) => {
   const form = useForm({
     defaultValues: defaultValues ?? initialValue,
-    resolver: yupResolver(shema),
+    resolver: yupResolver(schema),
   });
 
   const handleSubmit = (data) => {

@@ -1,20 +1,15 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { queryClient } from "../../../App";
-import Notification from "../../../components/Notification";
+import { useNotify } from "../../../context/NotifyContext";
 import client from "../../../sanity/config";
 import NovelStep from "../components/NovelStep";
 
 const Create = () => {
-  const [notification, setNotification] = useState({
-    state: false,
-    infor: {
-      type: "",
-      message: "",
-    },
-  });
+  const { notify } = useNotify();
+  const [completedStep, setCompletedStep] = useState(false);
+  const novelRef = useRef();
   const handleSubmit = async (data) => {
     try {
       const temp = [];
@@ -65,46 +60,32 @@ const Create = () => {
       await transaction.commit({
         autoGenerateArrayKeys: true,
       });
-      setNotification({
-        state: "true",
-        infor: {
-          type: "success",
-          message: "Create Novel Success",
-        },
-      });
+      setCompletedStep(true);
+      notify.success("Create Novel Success");
     } catch (error) {
-      setNotification({
-        state: "true",
-        infor: {
-          type: "error",
-          message: `Create Novel Error: ${error}`,
-        },
-      });
+      notify.err(`Create Novel Error: ${error}`);
     }
+  };
+
+  const handleRestartStep = () => {
+    setCompletedStep(false);
+    novelRef.current?.refresh();
   };
 
   return (
     <>
-      <NovelStep onSubmit={handleSubmit} />
-
-      {notification.state ? (
-        <>
-          <Notification notify={{ isOpen: true, message: notification.infor.message, type: notification.infor.type }} />
-          <Box sx={{ width: "75%", mx: "auto", display: "flex", justifyContent: "center", gap: 2 }}>
-            <Link style={{ textDecoration: "none" }}>
-              <Button variant="contained" color="secondary" onClick={() => window.location.reload(true)}>
-                Create
-              </Button>
-            </Link>
-            <Link to={"/story"} style={{ textDecoration: "none" }}>
-              <Button color="info" variant="contained">
-                List Novel
-              </Button>
-            </Link>
-          </Box>
-        </>
-      ) : (
-        ""
+      <NovelStep onSubmit={handleSubmit} ref={novelRef} />
+      {completedStep && (
+        <Box sx={{ width: "75%", mx: "auto", display: "flex", justifyContent: "center", gap: 2 }}>
+          <Button variant="contained" color="secondary" onClick={handleRestartStep}>
+            Create
+          </Button>
+          <Link to={"/story"} style={{ textDecoration: "none" }}>
+            <Button color="info" variant="contained">
+              List Novel
+            </Button>
+          </Link>
+        </Box>
       )}
     </>
   );

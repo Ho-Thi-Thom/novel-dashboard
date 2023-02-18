@@ -1,36 +1,25 @@
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { Box, IconButton } from "@mui/material";
+import client from "../../../sanity/config";
 
 export const dataGridServices = {
-  getColumn: ({ handleEdit }) => [
-    {
-      field: "username",
-      headerName: "Username",
-      editable: true,
-      width: 150,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      flex: 1,
-      width: 150,
-    },
-    {
-      field: "",
-      headerName: "Action",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <Box>
-            <IconButton onClick={() => handleEdit(params.row)}>
-              <ModeEditIcon color="info" />
-            </IconButton>
-          </Box>
-        );
+  getColumn: ({ handleEdit, roles }) => {
+    // client.fetch()
+    return [
+      {
+        field: "username",
+        headerName: "Username",
+        width: 150,
+        editable: true,
       },
-    },
-  ],
+      {
+        field: "role",
+        headerName: "Role",
+        width: 200,
+        editable: true,
+        type: "singleSelect",
+        valueOptions: roles,
+      },
+    ];
+  },
 };
 
 export const services = {};

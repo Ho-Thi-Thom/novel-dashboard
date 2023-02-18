@@ -9,15 +9,25 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useDispatch } from "react-redux";
+import { logout } from "../app/auth";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isActive = selected === to;
   return (
-    <MenuItem active={isActive} style={{ color: colors.grey[100] }} onClick={() => setSelected(to)} icon={icon}>
+    <MenuItem
+      active={isActive}
+      style={{ color: colors.grey[100] }}
+      onClick={() => {
+        to && setSelected(to);
+        onClick?.();
+      }}
+      icon={icon}
+    >
       <Typography>{title}</Typography>
-      <Link to={to} />
+      {to && <Link to={to} />}
     </MenuItem>
   );
 };
@@ -28,6 +38,12 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const location = useLocation();
   const [selected, setSelected] = useState("/" + location.pathname.split("/")[1]);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    dispatch(logout());
+  };
+
   return (
     <Box
       sx={{
@@ -75,7 +91,7 @@ const Sidebar = () => {
                   width="100px"
                   height="100px"
                   style={{ cursor: "pointer", borderRadius: "50%", background: "#fff" }}
-                  src={require("../untils/img/img.jpg")}
+                  src={require("../utils/img/img.jpg")}
                 />
               </Box>
               <Box textAlign="center">
@@ -112,7 +128,7 @@ const Sidebar = () => {
           <Box style={{ mb: "0px" }} marginBottom="0">
             <Item
               title="Log out"
-              to="/auth"
+              onClick={handleLogout}
               icon={<LogoutOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
