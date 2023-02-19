@@ -23,8 +23,22 @@ function App() {
             <Routes>
               <Route path="auth" element={<Auth />} />
               <Route path="/" element={<Layout />}>
-                <Route path="story/*" element={<Story />} />
-                <Route path="user/*" element={<User />} />
+                <Route
+                  path="story/*"
+                  element={
+                    <Permission route permissions={["RNOVELS", "WNOVELS", "ENOVELS", "RWE"]}>
+                      <Story />
+                    </Permission>
+                  }
+                />
+                <Route
+                  path="user/*"
+                  element={
+                    <Permission route permissions={["RUSERS", "AUSERS", "IAUSERS", "RWE"]}>
+                      <User />
+                    </Permission>
+                  }
+                />
               </Route>
               <Route path="error" element={<Error />} />
             </Routes>

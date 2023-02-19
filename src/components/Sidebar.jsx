@@ -9,7 +9,7 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/auth";
 
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
@@ -33,6 +33,7 @@ const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
 };
 
 const Sidebar = () => {
+  const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -91,15 +92,16 @@ const Sidebar = () => {
                   width="100px"
                   height="100px"
                   style={{ cursor: "pointer", borderRadius: "50%", background: "#fff" }}
-                  src={require("../utils/img/img.jpg")}
+                  src={user.image ? user.image : require("../utils/img/img.jpg")}
+                  // {require("../utils/img/img.jpg")}
                 />
               </Box>
               <Box textAlign="center">
                 <Typography variant="h2" sx={{ m: "10px 0 0 0" }} color={colors.grey[100]} fontWeight="bold">
-                  Thom Ho
+                  {user.username}
                 </Typography>
                 <Typography variant="h5" sx={{ m: "10px 0 0 0" }} color={colors.greenAccent[500]}>
-                  Admin
+                  {user.role.name}
                 </Typography>
               </Box>
             </Box>

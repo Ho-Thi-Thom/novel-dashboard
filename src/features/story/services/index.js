@@ -1,6 +1,7 @@
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { Box, IconButton } from "@mui/material";
+import Permission from "../../../components/Permission";
 
 export const dataGridServices = {
   getColumn: ({ navigate, handleDeleteItem }) => [
@@ -43,20 +44,17 @@ export const dataGridServices = {
       renderCell: (params) => {
         return (
           <Box>
-            <IconButton
-              onClick={() =>
-                navigate(params.id, {
-                  state: {
-                    data: "data",
-                  },
-                })
-              }
-            >
-              <ModeEditIcon color="info" />
-            </IconButton>
-            <IconButton onClick={() => handleDeleteItem(params)}>
-              <DeleteForeverIcon color="error" />
-            </IconButton>
+            <Permission permissions={["WNOVELS", "RWE"]}>
+              <IconButton onClick={() => navigate(params.id)}>
+                <ModeEditIcon color="info" />
+              </IconButton>
+            </Permission>
+
+            <Permission permissions={["ENOVELS", "RWE"]}>
+              <IconButton onClick={() => handleDeleteItem(params)}>
+                <DeleteForeverIcon color="error" />
+              </IconButton>
+            </Permission>
           </Box>
         );
       },

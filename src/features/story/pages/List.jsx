@@ -1,83 +1,68 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { queryClient } from "../../../App";
 import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
+import Permission from "../../../components/Permission";
 import client from "../../../sanity/config";
 import { GET_ALL_NOVEL } from "../../../sanity/novels";
-import { dataGridServices } from "../services";
+import useDataGridService from "../hook/useDataGridService";
 
 const List = () => {
-  const navigate = useNavigate();
-  const { data, isLoading, refetch } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
+  const { data, isLoading, error } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
     initialData: [],
   });
 
   const [open, setOpen] = useState({
     state: false,
-    infor: "",
+    info: "",
   });
-  // const [data, setData] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
-  // useEffect(() => {
-  //   client
-  //     .fetch(GET_ALL_NOVEL)
-  //     .then((result) => {
-  //       setData(result);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [isLoading]);
-
-  const openConfirm = (params) => {
-    setOpen({ state: true, infor: params.row });
-  };
 
   const handleClose = () => {
-    setOpen({ state: false, infor: "" });
+    setOpen({ state: false, info: "" });
   };
+
   const handleDeleteItem = (params) => {
-    openConfirm(params);
-    // client
-    //   .delete(params.row.id)
-    //   .then(() => {
-    //     console.log(" deleted", params.row);
-    //     // setIsLoading(true);
-    //     refetch();
-    //   })
-    //   .catch((err) => {
-    //     console.error("Delete failed: ", err.message);
-    //   });
+    setOpen({ state: true, info: params.row });
   };
+
   const handleConfirm = () => {
-    // console.log(open.infor);
-    // delete
+    client
+      .delete(open.info?.id)
+      .then(() => {
+        queryClient.invalidateQueries("novels");
+      })
+      .catch((err) => {
+        console.error("Delete failed: ", err.message);
+      });
+
     handleClose();
   };
   const [pageSize, setPageSize] = useState(7);
 
-  const columns = useMemo(() => {
-    return dataGridServices.getColumn({
-      handleDeleteItem,
-      navigate,
-    });
-  }, []);
+  const columns = useDataGridService({
+    handleDeleteItem,
+  });
 
   if (isLoading) return <div>Loading...</div>;
+
+  if (error) return <div>An error has occurred: {error.message}</div>;
 
   return (
     <Box m="20px 5px 20px 20px">
       <Header title="Novels" subtitle="List of Novel" />
-      <Box sx={{ display: "flex", justifyContent: "end" }}>
-        <Link style={{ textDecoration: "none" }} to="create">
-          <Button variant="contained" color="secondary">
-            Create
-          </Button>
-        </Link>
-      </Box>
+      <Permission permissions={["WNOVELS", "RWE"]}>
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Link style={{ textDecoration: "none" }} to="create">
+            <Button variant="contained" color="secondary">
+              Create
+            </Button>
+          </Link>
+        </Box>
+      </Permission>
+
       <DataGrid
         rows={data}
         columns={columns}
@@ -94,7 +79,7 @@ const List = () => {
       >
         <DialogTitle id="alert-dialog-title">Are you sure you want to delete this story ?</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{open.infor.title}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">{open.info.title}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>

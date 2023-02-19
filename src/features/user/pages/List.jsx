@@ -37,6 +37,7 @@ const List = () => {
       setRoles(temp);
     });
   }, []);
+
   const handleEdit = (params) => {};
 
   const columns = useMemo(() => {

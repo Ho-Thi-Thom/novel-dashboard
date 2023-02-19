@@ -16,8 +16,12 @@ export const GET_USER_LOGIN = `
         username,
         role ->{
             key,
-            name
-        }
+            name,
+            listPermission[] ->{
+                key,
+            }
+        },
+        image
     }
 `;
 

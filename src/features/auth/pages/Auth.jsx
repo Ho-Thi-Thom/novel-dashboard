@@ -17,16 +17,16 @@ const Auth = () => {
   }, []);
 
   const responseGoogle = async (response) => {
-    const { googleId, name } = response.profileObj;
-
-    localStorage.setItem("user", googleId);
+    const { googleId, name, imageUrl } = response.profileObj;
 
     await client.createIfNotExists({
       _id: googleId,
       _type: "user",
       username: name,
+      image: imageUrl,
     });
 
+    localStorage.setItem("user", googleId);
     // FAKE re-render
     setLogin(true);
   };
