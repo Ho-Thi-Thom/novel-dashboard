@@ -6,6 +6,7 @@ import Notification from "./components/Notification";
 import Permission from "./components/Permission";
 import { NotifyProvider } from "./context/NotifyContext";
 import Layout from "./layout/Layout";
+import { PERMISSION } from "./constant/permission";
 
 const Auth = lazy(() => import("./features/auth"));
 const Story = lazy(() => import("./features/story"));
@@ -26,7 +27,15 @@ function App() {
                 <Route
                   path="story/*"
                   element={
-                    <Permission route permissions={["RNOVELS", "WNOVELS", "ENOVELS", "RWE"]}>
+                    <Permission
+                      route
+                      permissions={[
+                        PERMISSION.READ_NOVELS,
+                        PERMISSION.WRITE_NOVELS,
+                        PERMISSION.EXECUTE_NOVELS,
+                        PERMISSION.ALL,
+                      ]}
+                    >
                       <Story />
                     </Permission>
                   }
@@ -34,7 +43,7 @@ function App() {
                 <Route
                   path="user/*"
                   element={
-                    <Permission route permissions={["RUSERS", "AUSERS", "IAUSERS", "RWE"]}>
+                    <Permission route permissions={[PERMISSION.READ_USERS, PERMISSION.ACTIVE_USERS, PERMISSION.ALL]}>
                       <User />
                     </Permission>
                   }

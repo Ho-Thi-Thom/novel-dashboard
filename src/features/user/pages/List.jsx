@@ -3,46 +3,27 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
-import client from "../../../sanity/config";
-import { GET_ALL_USER, ROLE } from "../../../sanity/users";
+import { GET_ALL_USER, GET_ALL_ROLE } from "../../../sanity/users";
 import { dataGridServices } from "../services";
+import useQuery from "../hook/useQuery";
+import useDataGridService from "../hook/useDataGridService";
 
 const List = () => {
-  const [data, setData] = useState([]);
   const [pageSize, setPageSize] = useState(2);
 
-  useEffect(() => {
-    client
-      .fetch(GET_ALL_USER)
-      .then((result) => {
-        const temp = result.map((item) => {
-          return { id: item.id, username: item.username, role: item.role.name, keyRole: item.role.key };
-        });
-        setData(temp);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const { data, loading, error } = useQuery(GET_ALL_USER);
 
-  const [roles, setRoles] = useState([]);
+  const handleEdit = (params) => {
+    console.log(params);
+  };
 
-  useEffect(() => {
-    client.fetch(ROLE).then((result) => {
-      console.log(result);
-      const temp = result.map((item) => {
-        return { value: item.key, label: item.name };
-      });
-      console.log(temp);
-      setRoles(temp);
-    });
-  }, []);
+  const columns = useDataGridService({
+    handleEdit,
+  });
 
-  const handleEdit = (params) => {};
+  if (loading) return <div> Loading ....</div>;
 
-  const columns = useMemo(() => {
-    return dataGridServices.getColumn({ handleEdit, roles });
-  }, []);
+  if (error) <div>{error.message}</div>;
 
   return (
     <Box m="20px 5px 20px 20px">

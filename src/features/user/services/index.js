@@ -1,7 +1,7 @@
 import client from "../../../sanity/config";
 
 export const dataGridServices = {
-  getColumn: ({ handleEdit, roles }) => {
+  getColumn: ({ handleEdit }) => {
     return [
       {
         field: "username",
@@ -9,7 +9,7 @@ export const dataGridServices = {
         width: 150,
       },
       {
-        field: "role",
+        field: "roleName",
         headerName: "Role",
         width: 200,
       },

@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Permission from "../../components/Permission";
+import { PERMISSION } from "../../constant/permission";
 
 const List = lazy(() => import("./pages/List"));
 const Edit = lazy(() => import("./pages/Edit"));
@@ -12,7 +13,7 @@ const Story = () => {
       <Route
         path="create"
         element={
-          <Permission route permissions={["RNOVELS", "WNOVELS", "RWE"]}>
+          <Permission route permissions={[PERMISSION.READ_NOVELS, PERMISSION.WRITE_NOVELS, PERMISSION.ALL]}>
             <Create />
           </Permission>
         }
@@ -20,7 +21,7 @@ const Story = () => {
       <Route
         index
         element={
-          <Permission route permissions={["RNOVELS", "RWE"]}>
+          <Permission route permissions={[PERMISSION.READ_NOVELS, PERMISSION.ALL]}>
             <List />
           </Permission>
         }
@@ -28,7 +29,7 @@ const Story = () => {
       <Route
         path=":id"
         element={
-          <Permission route permissions={["RNOVELS", "WNOVELS", "RWE"]}>
+          <Permission route permissions={[PERMISSION.READ_NOVELS, PERMISSION.WRITE_NOVELS, PERMISSION.ALL]}>
             <Edit />
           </Permission>
         }

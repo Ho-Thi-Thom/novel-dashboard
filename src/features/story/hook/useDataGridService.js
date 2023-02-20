@@ -5,12 +5,15 @@ import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Permission from "../../../components/Permission";
 import usePermission from "../../../hook/usePermission";
+import { PERMISSION } from "../../../constant/permission";
 
 const useDataGridService = ({ handleDeleteItem }) => {
   const navigate = useNavigate();
   const listPermission = usePermission();
   const columns = useMemo(() => {
-    const showActionColumn = ["WNOVELS", "ENOVELS", "RWE"].some((p) => listPermission.includes(p));
+    const showActionColumn = [PERMISSION.WRITE_NOVELS, PERMISSION.EXECUTE_NOVELS, PERMISSION.ALL].some((p) =>
+      listPermission.includes(p)
+    );
 
     const actionColumn = {
       field: "",
@@ -20,13 +23,13 @@ const useDataGridService = ({ handleDeleteItem }) => {
       renderCell: (params) => {
         return (
           <Box>
-            <Permission permissions={["WNOVELS", "RWE"]}>
+            <Permission permissions={[PERMISSION.WRITE_NOVELS, PERMISSION.ALL]}>
               <IconButton onClick={() => navigate(params.id)}>
                 <ModeEditIcon color="info" />
               </IconButton>
             </Permission>
 
-            <Permission permissions={["ENOVELS", "RWE"]}>
+            <Permission permissions={[PERMISSION.EXECUTE_NOVELS, PERMISSION.ALL]}>
               <IconButton onClick={() => handleDeleteItem?.(params)}>
                 <DeleteForeverIcon color="error" />
               </IconButton>

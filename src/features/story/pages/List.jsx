@@ -9,6 +9,7 @@ import Permission from "../../../components/Permission";
 import client from "../../../sanity/config";
 import { GET_ALL_NOVEL } from "../../../sanity/novels";
 import useDataGridService from "../hook/useDataGridService";
+import { PERMISSION } from "../../../constant/permission";
 
 const List = () => {
   const { data, isLoading, error } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
@@ -53,7 +54,7 @@ const List = () => {
   return (
     <Box m="20px 5px 20px 20px">
       <Header title="Novels" subtitle="List of Novel" />
-      <Permission permissions={["WNOVELS", "RWE"]}>
+      <Permission permissions={[PERMISSION.WRITE_NOVELS, PERMISSION.ALL]}>
         <Box sx={{ display: "flex", justifyContent: "end" }}>
           <Link style={{ textDecoration: "none" }} to="create">
             <Button variant="contained" color="secondary">

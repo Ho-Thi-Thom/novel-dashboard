@@ -27,6 +27,7 @@ const Auth = () => {
     });
 
     localStorage.setItem("user", googleId);
+
     // FAKE re-render
     setLogin(true);
   };

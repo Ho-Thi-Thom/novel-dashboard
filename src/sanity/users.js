@@ -6,7 +6,9 @@ export const GET_ALL_USER = `
             _id,
             name,
             key
-        }
+        },
+        "roleName": role ->name,
+        active
     }
 `;
 
@@ -25,7 +27,7 @@ export const GET_USER_LOGIN = `
     }
 `;
 
-export const ROLE = `
+export const GET_ALL_ROLE = `
 *[_type == 'role']{
     _id,
     name,
