@@ -1,20 +1,21 @@
 import { Box } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
-import { GET_ALL_USER, GET_ALL_ROLE } from "../../../sanity/users";
-import { dataGridServices } from "../services";
-import useQuery from "../hook/useQuery";
+import { GET_ALL_USER } from "../../../sanity/users";
 import useDataGridService from "../hook/useDataGridService";
+import useQuery from "../hook/useQuery";
 
 const List = () => {
-  const [pageSize, setPageSize] = useState(2);
+  const navigate = useNavigate();
+  const [pageSize, setPageSize] = useState(5);
 
   const { data, loading, error } = useQuery(GET_ALL_USER);
 
   const handleEdit = (params) => {
-    console.log(params);
+    // console.log("user edit", params);
+    navigate(params.id, { state: { data: params.row } });
   };
 
   const columns = useDataGridService({

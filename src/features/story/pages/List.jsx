@@ -1,8 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { queryClient } from "../../../App";
 import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
 import Permission from "../../../components/Permission";
@@ -12,7 +11,10 @@ import useDataGridService from "../hook/useDataGridService";
 import { PERMISSION } from "../../../constant/permission";
 
 const List = () => {
-  const { data, isLoading, error } = useQuery("novels", () => client.fetch(GET_ALL_NOVEL), {
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["novels"],
+    queryFn: () => client.fetch(GET_ALL_NOVEL),
     initialData: [],
   });
 
@@ -33,7 +35,7 @@ const List = () => {
     client
       .delete(open.info?.id)
       .then(() => {
-        queryClient.invalidateQueries("novels");
+        queryClient.invalidateQueries(["novels"]);
       })
       .catch((err) => {
         console.error("Delete failed: ", err.message);

@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useNotify } from "../../../context/NotifyContext";
 import client from "../../../sanity/config";
@@ -9,6 +10,7 @@ import NovelStep from "../components/NovelStep";
 const Create = () => {
   const { notify } = useNotify();
   const [completedStep, setCompletedStep] = useState(false);
+  const queryClient = useQueryClient();
   const novelRef = useRef();
   const handleSubmit = async (data) => {
     try {
@@ -26,17 +28,17 @@ const Create = () => {
 
       // CREATE VOCABULARIES
       temp.forEach((vocabulary) => {
-        const docVoca = {
+        const docVocabularies = {
           _id: vocabulary._id,
           _type: "vocabulary",
           vi: vocabulary.vi,
           en: vocabulary.en,
         };
 
-        transaction.createIfNotExists(docVoca);
+        transaction.createIfNotExists(docVocabularies);
       });
 
-      // CREATE NOVVEL
+      // CREATE NOVEL
       const doc = {
         _type: "story",
         content: data.content,
@@ -62,6 +64,7 @@ const Create = () => {
       });
       setCompletedStep(true);
       notify.success("Create Novel Success");
+      queryClient.invalidateQueries(["novels"]);
     } catch (error) {
       notify.err(`Create Novel Error: ${error}`);
     }

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Notification from "./components/Notification";
@@ -12,7 +12,13 @@ const Auth = lazy(() => import("./features/auth"));
 const Story = lazy(() => import("./features/story"));
 const User = lazy(() => import("./features/user"));
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 function App() {
   return (

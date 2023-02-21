@@ -1,14 +1,11 @@
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { Box, IconButton, Switch } from "@mui/material";
+import { Box, IconButton, Switch, Typography } from "@mui/material";
 import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import Permission from "../../../components/Permission";
-import usePermission from "../../../hook/usePermission";
 import { PERMISSION } from "../../../constant/permission";
+import usePermission from "../../../hook/usePermission";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useDataGridService = ({ handleEdit }) => {
-  const navigate = useNavigate();
   const listPermission = usePermission();
   const columns = useMemo(() => {
     const showActionColumn = [PERMISSION.ACTIVE_USERS, PERMISSION.ALL].some((p) => listPermission.includes(p));
@@ -22,7 +19,7 @@ const useDataGridService = ({ handleEdit }) => {
           <Box>
             <Permission permissions={[PERMISSION.ACTIVE_USERS, PERMISSION.ALL]}>
               <IconButton onClick={() => handleEdit(params)}>
-                <ModeEditIcon color="warning" />
+                <ModeEditIcon color="info" />
               </IconButton>
             </Permission>
           </Box>
@@ -48,11 +45,8 @@ const useDataGridService = ({ handleEdit }) => {
         flex: 1,
         editable: false,
         renderCell: (params) => {
-          return (
-            <Box>
-              <Switch checked={params.row.active} inputProps={{ "aria-label": "controlled" }} color="info" />
-            </Box>
-          );
+          const isActive = params.row.active;
+          return <Typography color={isActive ? "cyan" : "crimson"}>{isActive ? "Active" : "InActive"}</Typography>;
         },
       },
     ];
