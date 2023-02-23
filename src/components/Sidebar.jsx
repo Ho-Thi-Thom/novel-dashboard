@@ -11,7 +11,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/auth";
-
+import Permission from "./Permission";
+import { PERMISSION } from "../constant/permission";
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -36,10 +37,12 @@ const Sidebar = () => {
   const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const [selected, setSelected] = useState("/" + location.pathname.split("/")[1]);
+
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     localStorage.removeItem("user");
     dispatch(logout());
@@ -92,8 +95,7 @@ const Sidebar = () => {
                   width="100px"
                   height="100px"
                   style={{ cursor: "pointer", borderRadius: "50%", background: "#fff" }}
-                  src={user.image ? user.image : require("../utils/img/img.jpg")}
-                  // {require("../utils/img/img.jpg")}
+                  src={user.image || require("../utils/img/img.jpg")}
                 />
               </Box>
               <Box textAlign="center">
@@ -110,20 +112,32 @@ const Sidebar = () => {
           {/* Item */}
           <Box>
             <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
-              Novel
-            </Typography>
-            <Item
-              title="List Novels"
-              to="/story"
-              icon={<MenuBookOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
-              User
-            </Typography>
-            <Item title="User" to="/user" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Permission
+              permissions={[PERMISSION.READ_NOVELS, PERMISSION.WRITE_NOVELS, PERMISSION.EXECUTE_NOVELS, PERMISSION.ALL]}
+            >
+              <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
+                Novel
+              </Typography>
+              <Item
+                title="List Novels"
+                to="/story"
+                icon={<MenuBookOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Permission>
+            <Permission permissions={[PERMISSION.READ_USERS, PERMISSION.ACTIVE_USERS, PERMISSION.ALL]}>
+              <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
+                User
+              </Typography>
+              <Item
+                title="User"
+                to="/user"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </Permission>
           </Box>
         </Menu>
         <Menu>

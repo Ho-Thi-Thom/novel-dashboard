@@ -1,32 +1,25 @@
-import { Box, Button } from "@mui/material";
-import { gapi } from "gapi-script";
-import React, { useEffect, useState } from "react";
-import GoogleLogin from "react-google-login";
-import { FcGoogle } from "react-icons/fc";
+import { Box } from "@mui/material";
+import { GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import client from "../../../sanity/config";
 import perfect_two from "../../../utils/img/mp4/perfect_two.mp4";
+import client from "../../../sanity/config";
 
 const Auth = () => {
   const [, setLogin] = useState(false);
 
-  useEffect(() => {
-    gapi.load("client:auth2", () => {
-      gapi.auth2.init({ clientId: process.env.REACT_APP_GOOGLE_API_TOKEN });
-    });
-  }, []);
-
   const responseGoogle = async (response) => {
-    const { googleId, name, imageUrl } = response.profileObj;
+    const { sub, name, picture } = jwtDecode(response.credential);
 
     await client.createIfNotExists({
-      _id: googleId,
+      _id: sub,
       _type: "user",
       username: name,
-      image: imageUrl,
+      image: picture,
     });
 
-    localStorage.setItem("user", googleId);
+    localStorage.setItem("user", sub);
 
     // FAKE re-render
     setLogin(true);
@@ -71,23 +64,7 @@ const Auth = () => {
             flexDirection: "column",
           }}
         >
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
-            render={(renderProps) => (
-              <Button
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                variant="outlined"
-                color="primary"
-                startIcon={<FcGoogle />}
-              >
-                Sign in with Google
-              </Button>
-            )}
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy="single_host_origin"
-          />
+          <GoogleLogin onSuccess={responseGoogle} onFailure={responseGoogle} />
         </Box>
       </Box>
     </Box>

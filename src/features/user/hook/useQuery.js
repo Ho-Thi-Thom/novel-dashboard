@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../../../sanity/config";
 
-const useQuery = (query) => {
+const useQuery = (query, params = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [data, setData] = useState([]);
@@ -10,7 +10,7 @@ const useQuery = (query) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await client.fetch(query);
+        const response = await client.fetch(query, params);
         setData(response);
         setLoading(false);
       } catch (error) {

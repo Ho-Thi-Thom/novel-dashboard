@@ -7,8 +7,11 @@ import NovelStep from "../components/NovelStep";
 
 const Edit = () => {
   const { id } = useParams();
-  const { data, isLoading } = useQuery("novel", () => client.fetch(GET_DETAIL_NOVEL, { IdNovel: id }));
-
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["novel-detail", id],
+    queryFn: async () => await client.fetch(GET_DETAIL_NOVEL, { IdNovel: id }),
+    initialData: [],
+  });
   const handleSubmit = async (data) => {
     try {
       alert("success");

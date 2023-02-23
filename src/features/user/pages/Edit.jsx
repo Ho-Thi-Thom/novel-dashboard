@@ -1,19 +1,24 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button } from "@mui/material";
+import { CloseFullscreen } from "@mui/icons-material";
+import { Box, Button, IconButton } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import SelectBox from "../../../components/base/SelectBox";
 import Switch from "../../../components/base/Switch";
 import TField from "../../../components/base/TextField";
 import Header from "../../../components/Header";
+import { useNotify } from "../../../context/NotifyContext";
+import client from "../../../sanity/config";
 import { GET_ALL_ROLE } from "../../../sanity/users";
+import { GET_USER_BY_ID } from "../../../sanity/users";
 import useQuery from "../hook/useQuery";
+import { service } from "../services/edit";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("required"),
-  // role: yup.string().notOneOf([""], "You must select an option!"),
+  role: yup.string().required("required"),
 });
 
 const initialValues = {
@@ -23,8 +28,9 @@ const initialValues = {
 };
 
 const Edit = () => {
-  const location = useLocation();
-  const { current: data } = useRef(location.state.data);
+  const { id } = useParams();
+  const data = useRef([]);
+  const { notify } = useNotify();
 
   const { data: roles } = useQuery(GET_ALL_ROLE);
 
@@ -34,18 +40,41 @@ const Edit = () => {
   });
 
   useEffect(() => {
-    if (data) {
+    client
+      .fetch(GET_USER_BY_ID, { Id: id })
+      .then((result) => {
+        data.current = result;
+        handleReset();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }, []);
+
+  const handleSubmit = async (info) => {
+    const doc = service.createDoc(data.current, info);
+    const hasDoc = Object.keys(doc).length > 0;
+    if (hasDoc) {
+      try {
+        await service.update(data.current._id, doc);
+        notify.success("Update user success");
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      notify.info("No change");
+    }
+  };
+
+  const handleReset = () => {
+    if (data.current) {
       const info = {
-        active: data.active,
-        username: data.username,
-        role: data.role._id,
+        active: data.current.active,
+        username: data.current.username,
+        role: data.current.role?._id,
       };
       form.reset(info);
     }
-  }, [data]);
-
-  const handleSubmit = (data) => {
-    console.log(data);
   };
 
   return (
@@ -62,20 +91,20 @@ const Edit = () => {
         }}
       >
         <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <TField control={form.control} label="Username" name="username" />
 
             <SelectBox control={form.control} label="Role" name="role" options={roles} />
 
             <Switch control={form.control} label="Active" name="active" />
-            <Button
-              variant="contained"
-              type="submit"
-              style={{ marginTop: "7px", display: "flex", color: "black" }}
-              color={"info"}
-            >
-              Save
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+              <Button variant="contained" type="button" color="info" onClick={handleReset}>
+                Reset
+              </Button>
+              <Button variant="contained" type="submit" color="secondary">
+                Save
+              </Button>
+            </Box>
           </Box>
         </form>
       </Box>

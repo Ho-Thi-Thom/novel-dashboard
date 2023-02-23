@@ -10,7 +10,7 @@ const Switch = ({ control, name, label, onChange, ...props }) => {
       name={name}
       render={({ field, fieldState: { error } }) => (
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Sw checked={field.value} color="info" onChange={(e, value) => field.onChange(value)} id={id} />
+          <Sw checked={field.value} color="secondary" onChange={(e, value) => field.onChange(value)} id={id} />
           <InputLabel htmlFor={id} sx={{ cursor: "pointer", userSelect: "none" }}>
             {label}
           </InputLabel>

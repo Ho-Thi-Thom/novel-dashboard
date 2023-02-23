@@ -4,9 +4,11 @@ import Permission from "../../../components/Permission";
 import { PERMISSION } from "../../../constant/permission";
 import usePermission from "../../../hook/usePermission";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { useSelector } from "react-redux";
 
 const useDataGridService = ({ handleEdit }) => {
   const listPermission = usePermission();
+  const { user } = useSelector((state) => state.auth);
   const columns = useMemo(() => {
     const showActionColumn = [PERMISSION.ACTIVE_USERS, PERMISSION.ALL].some((p) => listPermission.includes(p));
 
@@ -15,6 +17,7 @@ const useDataGridService = ({ handleEdit }) => {
       headerName: "Action",
       flex: 1,
       renderCell: (params) => {
+        if (user._id === params.row.id) return null;
         return (
           <Box>
             <Permission permissions={[PERMISSION.ACTIVE_USERS, PERMISSION.ALL]}>
@@ -34,10 +37,11 @@ const useDataGridService = ({ handleEdit }) => {
         editable: false,
       },
       {
-        field: "roleName",
+        field: "role",
         headerName: "Role",
         width: 150,
         editable: false,
+        renderCell: (params) => params.row.role?.name,
       },
       {
         field: "active",

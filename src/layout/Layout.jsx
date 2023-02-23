@@ -46,6 +46,7 @@ const authHOC = (Component) => () => {
         const data = await client.fetch(GET_USER_LOGIN, {
           googleId: googleId,
         });
+
         // googleId FAKE
         if (!data) {
           notify.err("Fake GoogleId :(");
@@ -56,7 +57,15 @@ const authHOC = (Component) => () => {
 
         // NOT ACTIVE ROLE
         if (!data.role) {
-          notify.info("Not active account");
+          notify.info("Not active account role");
+          localStorage.removeItem("user");
+          navigate("/auth");
+          return;
+        }
+
+        // NOT ACTIVE
+        if (!data.active) {
+          notify.warn("Not active account");
           localStorage.removeItem("user");
           navigate("/auth");
           return;

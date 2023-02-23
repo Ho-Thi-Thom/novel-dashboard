@@ -1,6 +1,5 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
@@ -9,18 +8,18 @@ import client from "../../../sanity/config";
 import { GET_ALL_NOVEL } from "../../../sanity/novels";
 import useDataGridService from "../hook/useDataGridService";
 import { PERMISSION } from "../../../constant/permission";
+import { useQuery, QueryClient } from "@tanstack/react-query";
 
 const List = () => {
-  const queryClient = useQueryClient();
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["novels"],
-    queryFn: () => client.fetch(GET_ALL_NOVEL),
-    initialData: [],
-  });
-
   const [open, setOpen] = useState({
     state: false,
     info: "",
+  });
+  const queryClient = new QueryClient();
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["novel"],
+    queryFn: async () => await client.fetch(GET_ALL_NOVEL),
+    initialData: [],
   });
 
   const handleClose = () => {
@@ -54,7 +53,7 @@ const List = () => {
   if (error) return <div>An error has occurred: {error.message}</div>;
 
   return (
-    <Box m="20px 5px 20px 20px">
+    <Box m="20px 5px 20px 20px" sx={{ width: "90%", m: "auto" }}>
       <Header title="Novels" subtitle="List of Novel" />
       <Permission permissions={[PERMISSION.WRITE_NOVELS, PERMISSION.ALL]}>
         <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -74,6 +73,7 @@ const List = () => {
         rowsPerPageOptions={[7, 10, 20]}
         pagination
       />
+
       <Dialog
         open={open.state}
         onClose={handleClose}
