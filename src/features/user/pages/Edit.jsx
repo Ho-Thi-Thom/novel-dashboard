@@ -3,7 +3,7 @@ import { CloseFullscreen } from "@mui/icons-material";
 import { Box, Button, IconButton } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import SelectBox from "../../../components/base/SelectBox";
 import Switch from "../../../components/base/Switch";
@@ -13,7 +13,7 @@ import { useNotify } from "../../../context/NotifyContext";
 import client from "../../../sanity/config";
 import { GET_ALL_ROLE } from "../../../sanity/users";
 import { GET_USER_BY_ID } from "../../../sanity/users";
-import useQuery from "../hook/useQuery";
+import useQuery from "../../../hook/useQuery";
 import { service } from "../services/edit";
 
 const validationSchema = yup.object().shape({
@@ -28,6 +28,7 @@ const initialValues = {
 };
 
 const Edit = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const data = useRef([]);
   const { notify } = useNotify();
@@ -35,6 +36,7 @@ const Edit = () => {
   const { data: roles } = useQuery(GET_ALL_ROLE);
 
   const form = useForm({
+    mode: "onBlur",
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
@@ -54,15 +56,17 @@ const Edit = () => {
   const handleSubmit = async (info) => {
     const doc = service.createDoc(data.current, info);
     const hasDoc = Object.keys(doc).length > 0;
-    if (hasDoc) {
-      try {
-        await service.update(data.current._id, doc);
-        notify.success("Update user success");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
+    if (!hasDoc) {
       notify.info("No change");
+      return;
+    }
+
+    try {
+      await service.update(data.current._id, doc);
+      notify.success("Update user success");
+      navigate("/user");
+    } catch (error) {
+      notify.err(error.message);
     }
   };
 

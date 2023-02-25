@@ -8,7 +8,7 @@ const steps = [
   { step: 2, content: "Vocabularies" },
   { step: 3, content: "Review" },
 ];
-const ProgressStepper = ({ activeStep, setActiveStep }) => {
+const ProgressStepper = ({ activeStep }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -28,12 +28,7 @@ const ProgressStepper = ({ activeStep, setActiveStep }) => {
         }}
       >
         {steps.map(({ step, content }) => (
-          <Step
-            key={step}
-            onClick={() => {
-              setActiveStep(step);
-            }}
-          >
+          <Step key={step}>
             <StepLabel>{content}</StepLabel>
           </Step>
         ))}

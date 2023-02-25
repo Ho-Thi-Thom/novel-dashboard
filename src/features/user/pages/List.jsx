@@ -6,7 +6,7 @@ import DataGrid from "../../../components/DataGrid";
 import Header from "../../../components/Header";
 import { GET_ALL_USER } from "../../../sanity/users";
 import useDataGridService from "../hook/useDataGridService";
-import useQuery from "../hook/useQuery";
+import useQuery from "../../../hook/useQuery";
 
 const List = () => {
   const navigate = useNavigate();

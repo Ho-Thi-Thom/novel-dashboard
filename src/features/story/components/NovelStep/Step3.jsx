@@ -1,27 +1,27 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
-import React from "react";
-import useVocabularyContent from "../../../../hook/useVocabularyContent";
-import { tokens } from "../../../../theme";
-import Tooltip from "@mui/material/Tooltip";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import { styled } from "@mui/styles";
+import React from "react";
 import { useStepContext } from "../../../../context/StepContext";
-import { makeStyles } from "@mui/styles";
+import useVocabularyContent from "../../../../hook/useVocabularyContent";
+import { tokens } from "../../../../theme";
 
-const Step3 = ({ onSubmit, isEdit }) => {
-  const { backStep, data } = useStepContext();
+const Step3 = ({ onSubmit }) => {
+  const { backStep, data, isEdit } = useStepContext();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const BlueOnGreenTooltip = makeStyles({
+  const BlueOnGreenTooltip = styled(Tooltip)({
     tooltip: {
       fontSize: "14px",
       color: "white",
       backgroundColor: colors.greenAccent[900],
       padding: "5px",
     },
-  })(Tooltip);
+  });
 
   const renderContent = useVocabularyContent({
     content: data.content,

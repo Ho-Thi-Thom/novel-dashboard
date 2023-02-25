@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import client from "../../../sanity/config";
+import client from "../sanity/config";
 
 const useQuery = (query, params = {}) => {
   const [loading, setLoading] = useState(true);

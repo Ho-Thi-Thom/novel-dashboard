@@ -76,11 +76,10 @@ const Step1 = () => {
         id="image"
         control={form.control}
         hidden
-        name="upload"
+        name="image"
         accept="image/png, image/jpg, image/jpeg"
-        onChange={(fileBlob, file) => {
+        onChange={(fileBlob) => {
           form.setValue("imageUrl", fileBlob); // sử dụng chỉ để hiển thị
-          form.setValue("image", file); // sử dụng để upload lên sanity
         }}
       />
 

@@ -6,7 +6,6 @@ const client = SanityClient({
   dataset: "production",
   apiVersion: "2021-10-21",
   token: process.env.REACT_APP_SANITY_TOKEN,
-  useCdn: true,
 });
 
 const builder = ImageUrlBuilder(client);

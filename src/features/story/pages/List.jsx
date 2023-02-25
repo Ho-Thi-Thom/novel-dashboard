@@ -8,19 +8,14 @@ import client from "../../../sanity/config";
 import { GET_ALL_NOVEL } from "../../../sanity/novels";
 import useDataGridService from "../hook/useDataGridService";
 import { PERMISSION } from "../../../constant/permission";
-import { useQuery, QueryClient } from "@tanstack/react-query";
+import useQuery from "../../../hook/useQuery";
 
 const List = () => {
   const [open, setOpen] = useState({
     state: false,
     info: "",
   });
-  const queryClient = new QueryClient();
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["novel"],
-    queryFn: async () => await client.fetch(GET_ALL_NOVEL),
-    initialData: [],
-  });
+  const { loading, error, data } = useQuery(GET_ALL_NOVEL);
 
   const handleClose = () => {
     setOpen({ state: false, info: "" });
@@ -33,9 +28,7 @@ const List = () => {
   const handleConfirm = () => {
     client
       .delete(open.info?.id)
-      .then(() => {
-        queryClient.invalidateQueries(["novels"]);
-      })
+      .then(() => {})
       .catch((err) => {
         console.error("Delete failed: ", err.message);
       });
@@ -48,7 +41,7 @@ const List = () => {
     handleDeleteItem,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   if (error) return <div>An error has occurred: {error.message}</div>;
 

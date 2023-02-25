@@ -12,7 +12,7 @@ const TextField = ({ control, name, label, onChange, ...props }) => {
           variant="outlined"
           fullWidth
           label={label}
-          error={error}
+          error={Boolean(error)}
           helperText={error?.message}
           color="secondary"
           {...field}

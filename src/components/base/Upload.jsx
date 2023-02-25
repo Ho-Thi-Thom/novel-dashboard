@@ -3,10 +3,9 @@ import { Controller } from "react-hook-form";
 import { FormHelperText } from "@mui/material";
 
 const Upload = ({ control, name, onChange, accept, size = 2, ...props }) => {
-  const [file, setFile] = useState(null);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (e, fieldChange) => {
     // ...
     const file = e.target.files[0];
 
@@ -25,8 +24,8 @@ const Upload = ({ control, name, onChange, accept, size = 2, ...props }) => {
       if (error) {
         setError("");
       }
-      setFile(file);
-      onChange?.(URL.createObjectURL(file), file);
+      fieldChange(file);
+      onChange?.(URL.createObjectURL(file));
     }
   };
   return (
@@ -35,10 +34,17 @@ const Upload = ({ control, name, onChange, accept, size = 2, ...props }) => {
       name={name}
       render={({ field }) => (
         <>
-          <input type="file" accept={accept} value={field.value} {...props} onChange={handleChange} />
-          {file && (
+          <input
+            type="file"
+            accept={accept}
+            {...props}
+            onChange={(e) => {
+              handleChange(e, field.onChange);
+            }}
+          />
+          {field.value && (
             <>
-              <p>{file.name}</p>
+              <p>{field.value.name}</p>
             </>
           )}
           {error && (

@@ -9,6 +9,7 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/auth";
 import Permission from "./Permission";
@@ -137,6 +138,12 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+            </Permission>
+            <Permission permissions={[PERMISSION.ALL]}>
+              <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>
+                Role
+              </Typography>
+              <Item title="Role" to="/role" icon={<KeyOutlinedIcon />} selected={selected} setSelected={setSelected} />
             </Permission>
           </Box>
         </Menu>

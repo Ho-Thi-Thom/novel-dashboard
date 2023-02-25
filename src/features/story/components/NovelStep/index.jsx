@@ -65,7 +65,7 @@ const NovelStep = forwardRef(({ data, onSubmit }, ref) => {
       case 2:
         return <Step2 />;
       case 3:
-        return <Step3 onSubmit={handleSubmit} isEdit={isEdit} />;
+        return <Step3 onSubmit={handleSubmit} />;
       default:
         return null;
     }
@@ -76,6 +76,7 @@ const NovelStep = forwardRef(({ data, onSubmit }, ref) => {
     nextStep: handleNextStep,
     backStep: handleBack,
     save: save,
+    isEdit: isEdit,
   };
 
   return (
@@ -85,7 +86,7 @@ const NovelStep = forwardRef(({ data, onSubmit }, ref) => {
         subtitle={isEdit ? "Update the content for the story template" : "Create the content"}
       />
       <Box sx={{ py: 2, my: 2, mx: "auto", backgroundColor: colors.primary[400], borderRadius: 2, width: "70%" }}>
-        <ProgressStepper activeStep={step} setActiveStep={setStep} />
+        <ProgressStepper activeStep={step} />
       </Box>
       <StepProvider value={value}>
         <Suspense fallback={<div>Loading...</div>}>{renderStep}</Suspense>

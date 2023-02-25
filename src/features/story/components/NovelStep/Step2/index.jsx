@@ -13,9 +13,10 @@ import { tokens } from "../../../../../theme";
 import VocabularyInput from "./VocabularyInput";
 import VocabularyItem from "./VocabularyItem";
 import { useStepContext } from "../../../../../context/StepContext";
+import { useRef } from "react";
 
 const Step2 = () => {
-  const { nextStep, backStep, data } = useStepContext();
+  const { nextStep, backStep, data, isEdit } = useStepContext();
   const theme = useTheme();
   const color = tokens(theme);
   const _id = uuid();
@@ -23,12 +24,18 @@ const Step2 = () => {
   const [vocabularyRef] = useAutoAnimate();
   const [vocabularies, setVocabularies] = useState(
     data.vocabularies?.map((item) => {
-      return { ...item, state: item.state ?? color.greenAccent[500] };
+      return { ...item, state: item?.state ?? color.greenAccent[500] };
     }) ?? []
   );
   const spaceVocabularies = useMemo(() => {
     return data.content.split("*").length - 1;
   }, [data]);
+
+  const { current: change } = useRef({
+    creates: [],
+    updates: [],
+    deletes: [],
+  });
 
   const countVocabularies = vocabularies.length;
 
@@ -82,7 +89,9 @@ const Step2 = () => {
     setVocabularies((vocabularies) => {
       const temp = JSON.parse(JSON.stringify(vocabularies));
       const index = getIndex(temp, id);
-      temp.splice(index + 1, 0, { en: data.en.trim(), vi: data.vi.trim(), _id, state: "#61B146" });
+      const item = { en: data.en.trim(), vi: data.vi.trim(), _id, state: "#61B146" };
+      change.creates.push(item);
+      temp.splice(index + 1, 0, item);
       return temp;
     });
   };
@@ -91,7 +100,9 @@ const Step2 = () => {
     setVocabularies((vocabularies) => {
       const temp = JSON.parse(JSON.stringify(vocabularies));
       const index = getIndex(temp, id);
-      temp.splice(index, 1, { ...data, _id: id, state: "#E6B325" });
+      const item = { ...data, _id: id, state: "#E6B325" };
+      temp.splice(index, 1, item);
+      change.updates.push(item);
       return temp;
     });
   };
@@ -101,16 +112,31 @@ const Step2 = () => {
       const temp = JSON.parse(JSON.stringify(vocabularies));
       const index = getIndex(temp, id);
       temp.splice(index, 1);
+      change.deletes.push(id);
       return temp;
     });
   };
 
+  const getPayload = () => {
+    const result = {
+      vocabularies,
+    };
+    if (isEdit) {
+      result.change = change;
+    }
+    return result;
+  };
+
   const onNextStep = () => {
     if (spaceVocabularies === countVocabularies) {
-      nextStep({ vocabularies });
+      nextStep(getPayload());
     } else {
       alert("Number of words and spaces that are incompatible");
     }
+  };
+
+  const onBackStep = () => {
+    backStep(getPayload());
   };
   return (
     <DndProvider backend={HTML5Backend}>
@@ -171,7 +197,7 @@ const Step2 = () => {
           color="info"
           variant="contained"
           style={{ marginTop: "7px" }}
-          onClick={() => backStep({ vocabularies })}
+          onClick={onBackStep}
           startIcon={<ChevronLeftOutlinedIcon />}
         >
           Back step

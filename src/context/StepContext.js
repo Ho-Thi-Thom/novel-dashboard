@@ -8,6 +8,7 @@ const defaultValue = {
     image: null,
     vocabularies: [],
   },
+  isEdit: false,
   nextStep: () => {},
   backStep: () => {},
   save: () => {},
@@ -26,10 +27,11 @@ export const useStepContext = () => {
     throw Error("Must be using ib Step Provider");
   }
 
-  const { data, backStep, nextStep, save } = context;
+  const { data, isEdit, backStep, nextStep, save } = context;
 
   return {
     data,
+    isEdit,
     save,
     backStep(data) {
       backStep();

@@ -1,7 +1,6 @@
 import { Box, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useNotify } from "../../../context/NotifyContext";
 import client from "../../../sanity/config";
@@ -10,7 +9,6 @@ import NovelStep from "../components/NovelStep";
 const Create = () => {
   const { notify } = useNotify();
   const [completedStep, setCompletedStep] = useState(false);
-  const queryClient = useQueryClient();
   const novelRef = useRef();
   const handleSubmit = async (data) => {
     try {
@@ -64,7 +62,6 @@ const Create = () => {
       });
       setCompletedStep(true);
       notify.success("Create Novel Success");
-      queryClient.invalidateQueries(["novels"]);
     } catch (error) {
       notify.err(`Create Novel Error: ${error}`);
     }
