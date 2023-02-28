@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Notification from "./components/Notification";
 import Permission from "./components/Permission";
@@ -12,7 +12,7 @@ const Auth = lazy(() => import("./features/auth"));
 const Story = lazy(() => import("./features/story"));
 const User = lazy(() => import("./features/user"));
 const Role = lazy(() => import("./features/role"));
-
+const Home = lazy(() => import("./features/home"));
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +23,8 @@ function App() {
             <Routes>
               <Route path="auth" element={<Auth />} />
               <Route path="/" element={<Layout />}>
+                <Route index element={<Navigate to="dashboard" />} />
+                <Route path="dashboard/*" element={<Home />} />
                 <Route
                   path="story/*"
                   element={

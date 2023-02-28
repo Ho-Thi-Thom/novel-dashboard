@@ -18,17 +18,14 @@ const List = () => {
   const { data: permission } = useQuery(GET_ALL_PERMISSION);
   const [id, setId] = useState(user.role._id);
   const refactorData = useMemo(() => listToTree(data), [data]);
-  const handleClick = (id) => {
-    setId(id);
-  };
+
   return (
     <Box m="20px 5px 20px 20px" sx={{ width: "90%", m: "auto" }}>
       <Header title="Role Control" subtitle="Management role" />
       <Box sx={{ display: "flex", height: "75vh", gap: 2 }}>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", border: 1, borderRadius: "7px", p: 1.5 }}>
           <HeaderContent title="Role" subtitle="List role" />
-
-          <RoleControl data={refactorData} handleClick={handleClick} />
+          <RoleControl data={refactorData} setId={setId} />
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", border: 1, borderRadius: "7px", p: 1.5 }}>
           <HeaderContent title="Permission" subtitle="List permission" />

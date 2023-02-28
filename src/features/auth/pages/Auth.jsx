@@ -3,7 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import perfect_two from "../../../utils/img/mp4/perfect_two.mp4";
+import perfect_two from "../../../utils/mp4/perfect_two.mp4";
 import client from "../../../sanity/config";
 
 const Auth = () => {

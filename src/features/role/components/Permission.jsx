@@ -1,11 +1,15 @@
 import { isEmpty } from "lodash";
-import React, { useMemo, useState } from "react";
-import useQuery from "../../../hook/useQueryPermission";
+import React, { useEffect, useMemo, useState } from "react";
+import useQuery from "../../../hook/useQuery";
 import { GET_PERMISSION_OF_ROLE } from "../../../sanity/permission";
 import PermissionItem from "./PermissionItem";
 
 const Permission = ({ data, id }) => {
-  const { data: permissionOfRole } = useQuery(GET_PERMISSION_OF_ROLE, { id: id });
+  const { data: permissionOfRole, refetch } = useQuery(GET_PERMISSION_OF_ROLE, { id });
+
+  useEffect(() => {
+    refetch({ id });
+  }, [id]);
 
   const result = useMemo(() => {
     if (isEmpty(permissionOfRole) || isEmpty(data)) return [];
@@ -16,8 +20,9 @@ const Permission = ({ data, id }) => {
     });
   }, [data, permissionOfRole]);
 
+  console.log(result);
   return result.map((item) => {
-    return <PermissionItem data={item} key={item._id} />;
+    return <PermissionItem data={item} key={item._id} color="success" />;
   });
 };
 

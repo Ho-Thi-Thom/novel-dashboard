@@ -20,3 +20,13 @@ export const GET_DETAIL_NOVEL = `
     }
 }
 `;
+
+export const SEARCH_PARAMS = `
+*[_type == 'story' && title match $value] | order(dateTime(_createdAt) desc) {
+    "id":_id ,
+    title,
+    "imageUrl" :image.asset ->url,
+   "createdAt": _createdAt,
+   "updatedAt":_updatedAt
+}
+`;

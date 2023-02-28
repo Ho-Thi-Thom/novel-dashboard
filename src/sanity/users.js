@@ -54,3 +54,21 @@ export const GET_ALL_ROLE = `
     key
 }
 `;
+
+export const SEARCH_PARAMS = `
+    *[_type == 'role' && $level <= level] {
+        _id,
+        name,
+        level,
+        "users": *[_type == 'user' && role._ref == ^._id && username match $value] | order(dateTime(_createdAt) asc) {
+            "id":_id ,
+            username,
+            role ->{
+                _id,
+                name,
+                key
+            },
+            active
+        }
+    }
+`;

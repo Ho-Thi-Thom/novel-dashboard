@@ -1,28 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useCallback, useState } from "react";
 import client from "../sanity/config";
 
-const useQuery = (query, params = {}) => {
+const useQuery = (query, options = {}) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
   const [data, setData] = useState([]);
+  const [error, setError] = useState();
+
+  const refetch = useCallback(async (options = {}, newQuery) => {
+    setLoading(true);
+    try {
+      const data = await client.fetch(newQuery || query, options);
+      setData(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await client.fetch(query, params);
-        setData(response);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
+    if (options.__fetch && options.__fetch === false) return;
+    delete options.__fetch;
+    refetch(options);
+  }, []);
 
-    fetchData();
-  }, [query]);
-
-  return { data, loading, error };
+  return { data, loading, error, refetch };
 };
 
 export default useQuery;

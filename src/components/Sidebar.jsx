@@ -112,7 +112,13 @@ const Sidebar = () => {
 
           {/* Item */}
           <Box>
-            <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item
+              title="Dashboard"
+              to="/dashboard"
+              icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Permission
               permissions={[PERMISSION.READ_NOVELS, PERMISSION.WRITE_NOVELS, PERMISSION.EXECUTE_NOVELS, PERMISSION.ALL]}
             >

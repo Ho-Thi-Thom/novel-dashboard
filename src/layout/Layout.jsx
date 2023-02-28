@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, Typography } from "@mui/material";
 import React, { Suspense } from "react";
 import { ColorModeContext, useMode } from "../theme";
 
@@ -11,6 +11,7 @@ import Topbar from "../components/Topbar";
 import { useNotify } from "../context/NotifyContext";
 import client from "../sanity/config";
 import { GET_USER_LOGIN } from "../sanity/users";
+import Home from "../features/home";
 
 const Layout = () => {
   const [theme, colorMode] = useMode();
