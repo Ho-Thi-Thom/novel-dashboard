@@ -1,7 +1,13 @@
+import { Box, Checkbox, Typography } from "@mui/material";
 import React from "react";
 
-const PermissionItem = ({ data }) => {
-  return <div>{data.name}</div>;
+const PermissionItem = ({ data, ...prop }) => {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Checkbox disabled {...prop} checked={data.checked} />
+      <Typography variant="h6">{data.name}</Typography>
+    </Box>
+  );
 };
 
 export default PermissionItem;

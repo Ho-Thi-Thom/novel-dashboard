@@ -38,7 +38,7 @@ const Sidebar = () => {
   const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const location = useLocation();
   const [selected, setSelected] = useState("/" + location.pathname.split("/")[1]);
 
